@@ -1,34 +1,40 @@
 <!doctype html>
 <html>
-    <head>
-        <meta charset="UTF-8" />
-        <title>hello phaser!</title>
-        <script src="libs/phaser-official/build/phaser.min.js"></script>
-    </head>
-    <body>
+	<head>
+		<meta charset="UTF-8" />
+		<title>kitty</title>
+		<script src="libs/phaser-official/build/phaser.js"></script>
+	</head>
+	<body>
 
-    <script type="text/javascript">
+	<script type="text/javascript">
 
-    window.onload = function() {
+	window.onload = function() {
 
-        var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create });
+		var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create });
 
-        function preload () {
+		function preload () {
 
-            game.load.image('logo', 'http://placekitty.artisan.io/200/300');
+			game.load.crossOrigin = "anonymous"
+			game.load.image('logo', 'image/rand.jpg');
 
-        }
+		}
 
-        function create () {
+		function create () {
 
-            var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'logo');
-            logo.anchor.setTo(0.5, 0.5);
+			var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'logo');
+			var style = { font: "20px Courier New", fill: "#ffffff", align: "center" };
+			var text = game.add.text(game.world.centerX, game.world.centerY, "printf", style);
 
-        }
+			text.anchor.set(0.5);
+			
+			logo.anchor.setTo(0.5, 0.5);
 
-    };
+		}
 
-    </script>
+	};
 
-    </body>
+	</script>
+
+	</body>
 </html>
