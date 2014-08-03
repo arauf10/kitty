@@ -13,6 +13,10 @@
 
 		var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 		var printf;
+		var kitties;
+		var bullets;
+		var score = 0;
+		var scoreboard;
 		var frame = 0;
 
 		function preload () {
@@ -47,6 +51,9 @@
 
 		function create () {
 
+			kitties = game.add.group();
+			bullets = game.add.group();
+
 			// game.physics.enable(sprite, Phaser.Physics.ARCADE);
 
 
@@ -57,27 +64,39 @@
 			player = game.add.sprite(game.world.centerX, 550, 'printf');
 			player.anchor.setTo(0.5, 0.5);
 			game.input.onDown.add(shoot, this);
+			var style = { font: "20px Courier New", fill: "#ffffff", align: "right" };
+			scoreboard = game.add.text(800, 10, String(score), style);
+			scoreboard.anchor.setTo(1,0)
 			
 
 		}
 
 		function update () {
 			console.log(frame++)
-			if (frame%30 == Math.round(frame/300)) {
-				var kitty = game.add.sprite(random(0,800), -250, 'kitty' + Math.round(random(0,5.5)));
+			if (frame%30 <= Math.round(frame/300)) {
+				var kitty = kitties.create(random(0,800), -250, 'kitty' + Math.round(random(0,5.5)));
 				game.physics.enable(kitty, Phaser.Physics.ARCADE);
 				kitty.body.gravity.y = random(75,125);
 				kitty.anchor.setTo(0.5, 0.5);
 			}
-			player.x = game.input.position.x
+			player.x = game.input.position.x;
+			game.physics.arcade.overlap(bullets, kitties, collisionHandler, null, this);
+			scoreboard.setText(String(score));
 		}
 
 		function shoot (ptr) {
 			var type = Math.round(random(0,1));
-			var bullet = game.add.sprite(game.input.position.x, 540, String(type));
+			var bullet = bullets.create(game.input.position.x, 540, String(type));
 			game.physics.enable(bullet, Phaser.Physics.ARCADE);
 			bullet.body.gravity.y = -random(200,250);
 			bullet.anchor.setTo(0.5, 0.5);
+
+		}
+
+		function collisionHandler (bullet, kitty) {
+			score++;
+		    bullet.kill();
+		    kitty.kill();
 
 		}
 
